@@ -16,4 +16,10 @@ When you reach the end, stay in the quiet a moment longer. It was yours before i
 
 const destDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 mkdirSync(destDir, { recursive: true });
+// The sealed scorer only judges UTF-8 text of 1 to 1,000 characters that is
+// not only white space: refuse to write anything that would fail the gate.
+const chars = [...TEXT];
+if (chars.length < 1 || chars.length > 1000 || TEXT.trim().length === 0) {
+  throw new Error(`entry.txt must be 1-1000 non-blank characters, got ${chars.length}`);
+}
 writeFileSync(join(destDir, 'entry.txt'), TEXT, 'utf8');
